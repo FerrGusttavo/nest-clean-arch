@@ -1,4 +1,4 @@
-import { EditQuestionUseCase } from '@/domain/forum/application/use-cases/edit-question'
+import { EditAnswerUseCase } from '@/domain/forum/application/use-cases/edit-answer'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
@@ -12,33 +12,31 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 
-const editQuestionBodySchema = z.object({
-  title: z.string(),
+const editAnswerBodySchema = z.object({
   content: z.string(),
 })
 
-type EditQuestionBodySchema = z.infer<typeof editQuestionBodySchema>
+type EditAnswerBodySchema = z.infer<typeof editAnswerBodySchema>
 
-@Controller('questions')
-export class EditQuestionController {
-  constructor(private readonly editQuestion: EditQuestionUseCase) {}
+@Controller('answers')
+export class EditAnswerController {
+  constructor(private readonly editAnswer: EditAnswerUseCase) {}
 
   @Put(':id')
   @HttpCode(204)
   async handle(
     @CurrentUser()
     user: UserPayload,
-    @Body(new ZodValidationPipe(editQuestionBodySchema))
-    body: EditQuestionBodySchema,
-    @Param('id') questionId: string,
+    @Body(new ZodValidationPipe(editAnswerBodySchema))
+    body: EditAnswerBodySchema,
+    @Param('id') answerId: string,
   ) {
-    const { title, content } = body
+    const { content } = body
     const userId = user.sub
 
-    const result = await this.editQuestion.execute({
+    const result = await this.editAnswer.execute({
       authorId: userId,
-      questionId,
-      title,
+      answerId,
       content,
       attachmentsIds: [],
     })
