@@ -7,6 +7,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaQuestionDetailsMapper } from '../mappers/prisma-question-details-mapper'
 import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
 import { PrismaService } from '../prisma.service'
+import { DomainEvents } from '@/core/events/domain-events'
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
@@ -79,6 +80,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     await this.questionAttachmentsRepository.createMany(
       question.attachments.getItems(),
     )
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
   async save(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
@@ -97,6 +100,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         question.attachments.getRemovedItems(),
       ),
     ])
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
   async delete(question: Question): Promise<void> {
     await this.prisma.question.delete({

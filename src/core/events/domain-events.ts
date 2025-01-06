@@ -9,6 +9,8 @@ export class DomainEvents {
 
   private static markedAggregates: AggregateRoot<unknown>[] = []
 
+  public static shouldRun = true
+
   public static markAggregateForDispatch(aggregate: AggregateRoot<unknown>) {
     // biome-ignore lint/complexity/noThisInStatic: <explanation>
     const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id)
@@ -86,6 +88,10 @@ export class DomainEvents {
 
     // biome-ignore lint/complexity/noThisInStatic: <explanation>
     const isEventRegistered = eventClassName in this.handlersMap
+
+    if (!DomainEvents.shouldRun) {
+      return
+    }
 
     if (isEventRegistered) {
       // biome-ignore lint/complexity/noThisInStatic: <explanation>
