@@ -1,5 +1,5 @@
-import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import type { Optional } from '@/core/types/optional'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 import { QuestionCommentCreatedEvent } from '../events/question-comment-created-event'
 import { Comment, type CommentProps } from './comment'
 

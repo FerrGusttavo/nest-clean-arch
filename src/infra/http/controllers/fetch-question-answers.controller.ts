@@ -1,3 +1,4 @@
+import { FetchQuestionAnswersUseCase } from '@/domain/forum/application/use-cases/fetch-question-answers'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import {
   BadRequestException,
@@ -7,7 +8,6 @@ import {
   Query,
 } from '@nestjs/common'
 import { z } from 'zod'
-import { FetchQuestionAnswersUseCase } from '@/domain/forum/application/use-cases/fetch-question-answers'
 import { AnswerPresenter } from '../presenters/answer-presenter'
 
 const pageQueryParamSchema = z
